@@ -1,0 +1,45 @@
+{
+  "name": "userandprofilemanagement-be",
+  "version": "1.0.0",
+  "description": "A backend application for managing user accounts and profiles, built with Node.js, Express, MySQL, and Sequelize. Features include user authentication, profile management, and secure API endpoints.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "dev:inspector": "nodemon --inspect index.js",
+    "dev:debug": "nodemon --inspect-brk index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoordhuJeyakumar/userandprofilemanagement-be.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mysql",
+    "sequelize",
+    "JWT",
+    "authentication",
+    "user-management",
+    "profile-management",
+    "backend"
+  ],
+  "author": "Loordhu Jeyakumar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LoordhuJeyakumar/userandprofilemanagement-be/issues"
+  },
+  "homepage": "https://github.com/LoordhuJeyakumar/userandprofilemanagement-be#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.0",
+    "sequelize": "^6.37.3"
+  }
+}
