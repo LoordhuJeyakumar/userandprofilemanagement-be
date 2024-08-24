@@ -2,8 +2,9 @@
 
 // Import the DataTypes module from Sequelize, which provides various data types for defining model attributes.
 const { DataTypes } = require("sequelize");
-// Import the configured Sequelize instance from the index file.
-const sequelize = require("../index");
+const { sequelize } = require("../db");
+
+
 
 // Define the User model with various fields and configurations.
 const UserModel = sequelize.define(

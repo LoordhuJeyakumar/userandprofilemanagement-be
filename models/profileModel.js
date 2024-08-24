@@ -1,9 +1,8 @@
 /* Profile Model */
 
-//Import the configured Sequelize instance from the index file.
-const sequelize = require("../index");
 //Import the DataTypes module from Sequelize.
 import { DataTypes } from "sequelize";
+import { sequelize } from "../db";
 
 // Define the Profile model with various fields and configurations.
 const ProfileModel = sequelize.define(
