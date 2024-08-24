@@ -32,7 +32,8 @@
   },
   "homepage": "https://github.com/LoordhuJeyakumar/userandprofilemanagement-be#readme",
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "sequelize-cli": "^6.6.2"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
