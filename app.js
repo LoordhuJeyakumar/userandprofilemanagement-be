@@ -2,6 +2,7 @@
 //Import cors for handling cross origin resource sharing
 const express = require("express");
 const cors = require("cors");
+const appRouter = require("./routes");
 
 // Create an instance of Express
 const app = express();
@@ -19,6 +20,9 @@ app.get("/", (req, res) => {
         <h1>Welcome to User & Profile Management API</h1>
         <b style="color:white; background-color:green; padding:5">Connected to MongoDB Application Health is Good</b>`);
 });
+
+// Use the application routes defined in appRouter
+app.use("/api/v1", appRouter);
 
 //Define middleware function to handle unknown routes
 const unknownEndpoint = (req, res) => {

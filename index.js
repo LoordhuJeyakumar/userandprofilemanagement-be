@@ -13,9 +13,9 @@ const SERVER_PORT = envProcessConfig.SERVER_PORT || 3000;
 
 connectToDB()
 .then(() => {
-  if (process.env.NODE_ENV !== "production") {
+  /* if (process.env.NODE_ENV !== "production") {
     syncDatabase();
-  }
+  } */
 
   app.listen(SERVER_PORT, () => {
     console.log(`Server is running on port ${SERVER_PORT}`);

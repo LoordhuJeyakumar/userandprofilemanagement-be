@@ -1,8 +1,9 @@
 /* Profile Model */
 
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../db");
+
 //Import the DataTypes module from Sequelize.
-import { DataTypes } from "sequelize";
-import { sequelize } from "../db";
 
 // Define the Profile model with various fields and configurations.
 const ProfileModel = sequelize.define(
@@ -21,12 +22,12 @@ const ProfileModel = sequelize.define(
     // Define the 'phoneNumber' field as a non-nullable string.
     phoneNumber: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     // Define the 'gender' field as an ENUM with possible values 'male', 'female', and 'other'.
     gender: {
       type: DataTypes.ENUM("male", "female", "other"),
-      allowNull: false,
+      allowNull: true,
     },
     // Define the 'profilePicture' field as a string, allowing null values.
     profilePicture: {
@@ -36,7 +37,7 @@ const ProfileModel = sequelize.define(
     // Define the 'dateOfBirth' field as a non-nullable date (only date, no time).
     dateOfBirth: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: true,
     },
     // Define the 'address' field as a non-nullable string.
     address: {
