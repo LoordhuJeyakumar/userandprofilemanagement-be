@@ -3,8 +3,7 @@ const { ProfileModel, UserModel } = require("../models");
 const profileController = {
   getProfile: async (req, res) => {
     try {
-      const id = req.userId;
-      console.log(user.userId);
+      const id = req?.userId;
 
       const profile = await ProfileModel.findOne({
         where: { userId: id },
@@ -64,6 +63,12 @@ const profileController = {
       });
     } catch (error) {
       console.log(error);
+      //SequelizeDatabaseError
+      
+      if (error.name === "SequelizeDatabaseError") {
+        return res.status(400).json({ error: "Invalid input", errorMessage:error.parent.sqlMessage });
+      }
+    
       return res.status(500).json({ error: "Internal server error" });
     }
   },
