@@ -12,6 +12,12 @@ const config = {
     dialect: "mysql",
     jwtSecret: process.env.JWT_SECRET || "secret",
     server_port: process.env.PORT, // Server port
+    email_host: process.env.EMAIL_HOST, // Email host
+    email_user: process.env.EMAIL_USER, // Email user
+    email_pass: process.env.EMAIL_PASS, // Email password
+    email_port: process.env.EMAIL_PORT, // Email port
+    email_secure: process.env.EMAIL_SECURE, // Email secure connection flag
+    frontend_baseuri: process.env.FRONTEND_BASEURI, // Frontend base URI
   },
   production: {
     username: process.env.DB_USER || "avnadmin", // MySQL username for production
@@ -23,6 +29,13 @@ const config = {
     port: process.env.DB_PORT || 3306, // Database port for production
     dialect: "mysql", // Dialect for Sequelize (MySQL)
     jwtSecret: process.env.JWT_SECRET || "secret", // JWT secret key for token signing
+
+    email_host: process.env.EMAIL_HOST, // Email host
+    email_user: process.env.EMAIL_USER, // Email user
+    email_pass: process.env.EMAIL_PASS, // Email password
+    email_port: process.env.EMAIL_PORT, // Email port
+    email_secure: process.env.EMAIL_SECURE, // Email secure connection flag
+    frontend_baseuri: process.env.FRONTEND_BASEURI, // Frontend base URI
   },
 };
 
