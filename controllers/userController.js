@@ -3,6 +3,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const envProcessConfig = require("../config/config");
 const { validateEmail } = require("../utils/helper");
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
+
+// Async function to send a verification email to the user
+async function sendEmail(userData, emailType) {
+  try {
+    const verificationEmail = await sendVerificationEmail(userData, emailType);
+
+    console.log("Verification email sent successfully");
+    return verificationEmail;
+  } catch (error) {
+    console.error("Error sending verification email:", error);
+    return error;
+  }
+}
 
 const userController = {
   registerUser: async (req, res) => {
@@ -32,9 +46,10 @@ const userController = {
           ? res
               .status(400)
               .json({ error: `User with ${existingUser.email} already exists` })
-          : res
-              .status(400)
-              .json({ error: "User already exists but not verified" });
+          : res.status(400).json({
+              error:
+                "User already exists but not verified, please verify your email",
+            });
       }
 
       const hashPassword = await bcrypt.hash(password, 10);
@@ -63,8 +78,8 @@ const userController = {
         address: "",
       });
 
-      return res.status(201).json({
-        message: "User registered successfully",
+      res.status(201).json({
+        message: "User registered successfully, please verify your email",
         user: {
           username: newUser.username,
           email: newUser.email,
@@ -72,6 +87,12 @@ const userController = {
           updatedAt: newUser.updatedAt,
         },
       });
+
+      let emailInfo = await sendEmail(newUser, "activationEmail");
+      if (!emailInfo) {
+        console.error("Error sending verification email");
+      }
+      return;
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Internal server error" });
@@ -153,9 +174,9 @@ const userController = {
       return res.status(500).json({ error: "Internal server error" });
     }
   },
-  getUserById: async (req, res) => {
+  getUserDetails: async (req, res) => {
     try {
-      const { id } = req.params;
+      const id = req.userId;
       const user = await UserModel.findByPk(id, {
         attributes: {
           exclude: ["password", "verificationToken", "resetPasswordToken"],
@@ -175,7 +196,7 @@ const userController = {
   },
   updateUser: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
       const { username, email } = req.body;
       const user = await UserModel.findByPk(id);
       if (!user) {
@@ -211,17 +232,28 @@ const userController = {
   },
   verifyUser: async (req, res) => {
     try {
-      const { token, id } = req.params;
+      const { id, token } = req.params;
+      console.log(id);
+
       if (!token) {
         return res.status(400).json({ error: "Token is required" });
       }
       const decoded = jwt.verify(token, envProcessConfig.jwtSecret);
       const user = await UserModel.findOne({ where: { email: decoded.email } });
+
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
 
+      if (user.isActive && user.isVerified) {
+        return res.status(400).json({ error: "User already verified" });
+      }
+
       if (user.id != id) {
+        return res.status(400).json({ error: "Invalid token" });
+      }
+
+      if (user.verificationToken != token) {
         return res.status(400).json({ error: "Invalid token" });
       }
 
@@ -241,6 +273,43 @@ const userController = {
         return res.status(400).json({ error: "Invalid token" });
       }
 
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  },
+  changePassword: async (req, res) => {
+    try {
+      const { id } = req.user;
+      const { oldPassword, newPassword } = req.body;
+
+      if (!oldPassword || !newPassword) {
+        return res
+          .status(400)
+          .json({ error: "Please provide old password and new password" });
+      }
+
+      const user = await UserModel.findByPk(id);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: "Invalid old password" });
+      }
+
+      const hashPassword = await bcrypt.hash(newPassword, 10);
+
+      user.password = hashPassword;
+
+      await user.save();
+
+      return res.status(200).json({
+        message: "Password changed successfully",
+      });
+    } catch (error) {
+      console.error(error);
       return res.status(500).json({ error: "Internal server error" });
     }
   },

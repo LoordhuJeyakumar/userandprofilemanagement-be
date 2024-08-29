@@ -18,6 +18,10 @@ const config = {
     email_port: process.env.EMAIL_PORT, // Email port
     email_secure: process.env.EMAIL_SECURE, // Email secure connection flag
     frontend_baseuri: process.env.FRONTEND_BASEURI, // Frontend base URI
+    aws_access_key: process.env.AWS_ACCESS_KEY,
+    aws_secret_key: process.env.AWS_SECRET_KEY,
+    aws_region: process.env.AWS_REGION,
+    aws_S3_bucket: process.env.AWS_S3_BUCKET,
   },
   production: {
     username: process.env.DB_USER || "avnadmin", // MySQL username for production
@@ -36,6 +40,11 @@ const config = {
     email_port: process.env.EMAIL_PORT, // Email port
     email_secure: process.env.EMAIL_SECURE, // Email secure connection flag
     frontend_baseuri: process.env.FRONTEND_BASEURI, // Frontend base URI
+
+    aws_access_key: process.env.AWS_ACCESS_KEY,
+    aws_secret_key: process.env.AWS_SECRET_KEY,
+    aws_region: process.env.AWS_REGION,
+    aws_S3_bucket: process.env.AWS_S3_BUCKET,
   },
 };
 

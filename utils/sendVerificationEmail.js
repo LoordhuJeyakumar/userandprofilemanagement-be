@@ -1,8 +1,9 @@
 const nodemailer = require("nodemailer"); // Import nodemailer for sending emails
 
 const passwordResetEmailMsg = require("./passwordResetEmailMsg");
-const envProcessConfigConfig = require("../config/config");
+
 const verificationEmailMessage = require("./VerificationEmailMessage");
+const envProcessConfig = require("../config/config");
 
 // Async function to send a verification email to the user
 async function sendVerificationEmail(user, emailTypeStr) {
@@ -12,7 +13,7 @@ async function sendVerificationEmail(user, emailTypeStr) {
       isPasswordResetEmail: emailTypeStr === "passwordResetEmail",
     };
     // Construct the verification email URL using environment variables and user data
-    let activationURL = `${envProcessConfigConfig.frontend_baseuri}verify-email/${user._id}/${user.verificationToken}`;
+    let activationURL = `${envProcessConfig.frontend_baseuri}verify-email/${user.id}/${user.verificationToken}`;
     let resetURL = `${envProcessConfig.frontend_baseuri}resetPassword/${user._id}/${user.resetToken}`;
 
     let URL = emailType.isActivationEmail ? activationURL : resetURL;
@@ -35,10 +36,10 @@ async function sendVerificationEmail(user, emailTypeStr) {
     const message = {
       from: envProcessConfig.EMAIL_USER,
       to: user.email,
-      subject: "Verify Your Email & Unlock TBC!",
+      subject: "Verify Your Email!",
       html: emailType.isActivationEmail
-        ? verificationEmailMessage(URL, user.name)
-        : passwordResetEmailMsg(URL, user.name), // Generate HTML content using imported function
+        ? verificationEmailMessage(URL, user.username)
+        : passwordResetEmailMsg(URL, user.username), // Generate HTML content using imported function
     };
 
     // Send the email using the transporter and handle success or failure
