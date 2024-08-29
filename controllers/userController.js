@@ -41,15 +41,28 @@ const userController = {
 
       if (existingUser) {
         let isVerified = existingUser.isVerified;
+        let isActive = existingUser.isActive;
 
-        return isVerified
-          ? res
-              .status(400)
-              .json({ error: `User with ${existingUser.email} already exists` })
-          : res.status(400).json({
-              error:
-                "User already exists but not verified, please verify your email",
-            });
+        if (isVerified && isActive) {
+          return res
+            .status(400)
+            .json({ error: `User with ${existingUser.email} already exists` });
+        }
+
+        if (!isActive) {
+          return res.status(400).json({
+            error: `User with ${existingUser.email} is not active, please contact admin`,
+          });
+        }
+
+        if (!isVerified) {
+          return res.status(400).json({
+            error: `User with ${existingUser.email} is not verified, please verify your email`,
+          });
+        }
+        
+
+       
       }
 
       const hashPassword = await bcrypt.hash(password, 10);
@@ -329,6 +342,10 @@ const userController = {
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
+
+     if (!user.isActive) {
+       return res.status(400).json({ error: "User already deactivated" });
+     }
 
       user.isActive = false;
 
