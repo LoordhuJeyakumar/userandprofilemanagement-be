@@ -25,4 +25,18 @@ userRouter.put(
   userController.changePassword
 );
 
+//Deactivate User
+userRouter.put(
+  "/deactivateUser",
+  authMiddleware,
+  userController.deactivateUser
+);
+
+//Delet User and Profile
+userRouter.delete(
+  "/deleteUserAndProfile",
+  authMiddleware,
+  userController.deleteUserAndProfile
+);
+
 module.exports = userRouter;

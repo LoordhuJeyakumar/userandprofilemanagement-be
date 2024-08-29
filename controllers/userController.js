@@ -127,6 +127,12 @@ const userController = {
           .json({ error: "User not verified, please verify your email!" });
       }
 
+      if (!user.isActive) {
+        return res
+          .status(403)
+          .json({ error: "User is not active, please contact admin!" });
+      }
+
       // Check if password is correct
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
@@ -307,6 +313,56 @@ const userController = {
 
       return res.status(200).json({
         message: "Password changed successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
+  //Deactivate User
+  deactivateUser: async (req, res) => {
+    try {
+      const { id } = req.user;
+      const user = await UserModel.findByPk(id);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      user.isActive = false;
+
+      await user.save();
+
+      return res.status(200).json({
+        message: "User deactivated successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
+  //Delete User and profile
+  deleteUserAndProfile: async (req, res) => {
+    try {
+      const { id } = req.user;
+      const user = await UserModel.findByPk(id);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const profile = await ProfileModel.findOne({ where: { userId: id } });
+      if (!profile) {
+        return res.status(404).json({ error: "Profile not found" });
+      }
+      await profile.destroy();
+
+      await user.destroy();
+
+      return res.status(200).json({
+        message: "User and associated profile deleted successfully",
       });
     } catch (error) {
       console.error(error);
