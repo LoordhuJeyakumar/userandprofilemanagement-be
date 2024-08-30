@@ -19,11 +19,11 @@ module.exports = {
       },
       phoneNumber: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       gender: {
         type: Sequelize.ENUM("male", "female", "other"),
-        allowNull: false,
+        allowNull: true,
       },
       profilePicture: {
         type: Sequelize.STRING,
@@ -31,7 +31,7 @@ module.exports = {
       },
       dateOfBirth: {
         type: Sequelize.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       address: {
         type: Sequelize.STRING,
