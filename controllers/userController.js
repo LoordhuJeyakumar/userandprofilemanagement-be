@@ -49,18 +49,18 @@ const userController = {
             .json({ error: `User with ${existingUser.email} already exists` });
         }
 
-        if (!isActive) {
-          return res.status(400).json({
-            error: `User with ${existingUser.email} is not active, please contact admin`,
-          });
-        }
+        
 
         if (!isVerified) {
           return res.status(400).json({
             error: `User with ${existingUser.email} is not verified, please verify your email`,
           });
         }
-        
+        if (!isActive) {
+          return res.status(400).json({
+            error: `User with ${existingUser.email} is not active, please contact admin`,
+          });
+        }
 
        
       }

@@ -106,8 +106,7 @@ const profileController = {
       const profile = await ProfileModel.findOne({
         where: { userId: user.id },
       });
-      console.log(file);
-      console.log("profilePicture", profilePicture);
+     
 
       if (!profile) {
         return res.status(404).json({ error: "Profile not found" });
@@ -126,7 +125,11 @@ const profileController = {
       }
 
       const result = await uploadFile(file);
+
       const profilePictureUrl = result.Location;
+
+      
+      
       await profile.update({ profilePicture: profilePictureUrl });
       return res.status(200).json({
         message: "Profile picture updated successfully",

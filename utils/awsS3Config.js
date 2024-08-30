@@ -19,7 +19,14 @@ const uploadFile = async (file) => {
   try {
     const command = new PutObjectCommand(params);
     const response = await s3Client.send(command);
-    return response;
+
+    // Construct the URL manually
+    const profilePictureUrl = `https://${params.Bucket}.s3.${envProcessConfig.aws_region}.amazonaws.com/${params.Key}`;
+
+    return {
+      ...response,
+      Location: profilePictureUrl, // Add the Location field
+    };
   } catch (error) {
     console.error("Error uploading file:", error);
     throw error;
